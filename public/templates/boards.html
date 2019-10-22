@@ -1,0 +1,17 @@
+{{ template "header.html" .}}
+<body class="container">
+{{ template "menu.html" . }}
+<ul id="board-list" class="list-group">
+{{range .payload }}
+    <li class="list-group-item board-item">
+        <a class="board-name" href="/boards/{{.ID}}">
+            <h2>{{.Name}}</h2>
+        </a>
+        <p class="board-desc">{{.Description}}</p>
+
+        <button class="btn btn-danger btn-sm ml-auto" onclick="deleteBoardById({{.ID}})">Удалить</button>
+    </li>
+{{end}}
+</ul>
+<script src="/public/scripts/script.js"></script>
+</body>

@@ -1,0 +1,39 @@
+{{ template "header.html" .}}
+<body class="container">
+{{ template "menu.html" . }}
+<h2>{{.boardName}}</h2>
+<p>{{.boardDescription}}</p>
+<ul id="card-list" class="list-group">
+{{$lists := .lists}}
+{{range .payload }}
+    <li class="list-group-item card-item">
+    {{$cardID := .ID}}
+    {{$status := .Status}}
+        <p class="card-desc">{{.Name}}</p>
+        <p class="card-desc">{{.Description}}</p>
+        <div class="card-status card-desc">
+            <p>Status:</p>
+            <div class="dropdown card-status-menu">
+                <button class="btn btn-primary dropdown-toggle card-status-menu" type="button"
+                        data-toggle="dropdown">{{.Status}}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                {{range $lists }}
+                {{if ne .Name $status}}
+                    <li>
+                        <a href="#" onclick="updateCardStatus({{$cardID}}, {{.ID}})">{{.Name}}</a>
+                    </li>
+                {{end}}
+                {{end}}
+                </ul>
+            </div>
+        </div>
+        <div class="card-desc">
+            <button class="btn btn-danger btn-sm ml-auto card-delete" onclick="deleteCardById({{.ID}})">Удалить</button>
+        </div>
+    </li>
+{{end}}
+</ul>
+<script src="/public/scripts/script.js"></script>
+</body>

@@ -1,0 +1,37 @@
+p{
+    line-height: 4;
+}
+
+.board-item{
+    display: flex;
+    justify-content: space-between;
+}
+
+.board-desc{
+}
+
+.card-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.card-status{
+    display: flex;
+    flex-direction: row;
+}
+
+.card-desc{
+    width: 25rem;
+    display: flex;
+    justify-items: center;
+}
+
+.card-status-menu{
+    width: 15rem;
+    margin: auto;
+}
+
+.card-delete{
+    margin: auto;
+}
