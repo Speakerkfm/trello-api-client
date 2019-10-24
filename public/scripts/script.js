@@ -38,3 +38,17 @@ function updateCardStatus(cardID, listID) {
         }
     });
 }
+
+
+function createCard(cardName, cardSecription) {
+    $.ajax({
+        type: "POST",
+        data: {
+            "listID": listID
+        },
+        url: "/v1/cards/" + cardID,
+        success: function () {
+            location.reload();
+        }
+    });
+}

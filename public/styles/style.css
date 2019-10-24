@@ -35,3 +35,7 @@ p{
 .card-delete{
     margin: auto;
 }
+
+.form-create-card{
+    padding-bottom: 20px;
+}

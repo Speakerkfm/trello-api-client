@@ -13,7 +13,7 @@ func MiddlewareSession() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var err error
 
-		Session, err = store.SessionStore.Get(c.Request, "X-AUTH-SESSION")
+		Session, err = store.Storage.SessionStore.Get(c.Request, "X-AUTH-SESSION")
 		if err != nil {
 			log.Error().Err(err).Msg("getting session failed")
 		}

@@ -18,6 +18,7 @@ const (
 	boardsUrl   = "https://api.trello.com/1/members/me/boards"
 	boardByIdUrl = "https://api.trello.com/1/boards/%s?lists=open"
 	cardByIdUrl = "https://api.trello.com/1/cards/%s"
+	cardsUrl = "https://api.trello.com/1/cards"
 	boardCardsByIdUrl = "https://api.trello.com/1/boards/%s/cards"
 )
 
@@ -94,6 +95,22 @@ func UpdateCardStatusById(cardID, listID, token string) error {
 	u.RawQuery = q.Encode()
 
 	_, err = doTrelloRequest(u.String(), http.MethodPut, token, http.NoBody)
+
+	return err
+}
+
+func CreateCard(listID, cardName, cardDescription, token string) error {
+	u, err := url.Parse(cardsUrl)
+	if err != nil {
+		panic(err)
+	}
+	q := u.Query()
+	q.Add("idList", listID)
+	q.Add("name", cardName)
+	q.Add("desc", cardDescription)
+	u.RawQuery = q.Encode()
+
+	_, err = doTrelloRequest(u.String(), http.MethodPost, token, http.NoBody)
 
 	return err
 }

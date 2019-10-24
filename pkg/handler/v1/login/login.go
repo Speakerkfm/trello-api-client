@@ -33,7 +33,7 @@ func TrelloLogin(c *gin.Context) {
 		return
 	}
 
-	store.Set(requestToken, requestSecret, 10 * time.Minute)
+	store.Storage.Set(requestToken, requestSecret, 10 * time.Minute)
 
 	c.Redirect(http.StatusMovedPermanently, authorizationURL.String())
 }
@@ -47,7 +47,7 @@ func TrelloCallback(c *gin.Context) {
 		return
 	}
 
-	requestSecret := store.Get(requestToken)
+	requestSecret := store.Storage.Get(requestToken)
 
 	accessToken, accessSecret, err := trello.AuthConfig.AccessToken(requestToken, requestSecret, verifier)
 	if err != nil {

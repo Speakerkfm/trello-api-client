@@ -13,15 +13,20 @@ import (
 	"time"
 )
 
-var SessionStore sessions.Store
-var redisClient *redis.Client
+var Storage *storage
+
+type storage struct {
+	SessionStore sessions.Store
+	redisClient *redis.Client
+	secret string
+}
 
 func Config(secretKey string) {
 	var rst *redistore.RediStore
 	var err error
 
 	redisOpt := redis.Options{Addr: ":6379"}
-	redisClient = redis.NewClient(&redisOpt)
+	redisClient := redis.NewClient(&redisOpt)
 
 	rst, err = redistore.NewRediStore(10, "tcp", ":6379", "", []byte(secretKey))
 	if err != nil {
@@ -33,15 +38,23 @@ func Config(secretKey string) {
 		secretKey: secretKey,
 	})
 
-	SessionStore = rst
+	Storage = &storage{
+		SessionStore: rst,
+		redisClient: redisClient,
+		secret: secretKey,
+	}
 }
 
-func Set(key string, value string, expiration time.Duration){
-	redisClient.Set(key, value, expiration)
+func (s *storage)Set(key string, value string, expiration time.Duration){
+	value = string(encrypt([]byte(value), s.secret))
+
+	s.redisClient.Set(key, value, expiration)
 }
 
-func Get(key string) string{
-	return redisClient.Get(key).Val()
+func (s *storage)Get(key string) string{
+	value := s.redisClient.Get(key).Val()
+
+	return string(decrypt([]byte(value), s.secret))
 }
 
 type hashSerializer struct {

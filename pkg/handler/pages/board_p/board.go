@@ -48,6 +48,7 @@ func GetBoardById(c *gin.Context){
 			"title": "Board Page",
 			"boardName": board.Name,
 			"boardDescription": board.Description,
+			"boardID": board.ID,
 			"authorized": len(session.Session.Values) > 0,
 			"lists": board.Lists,
 			"payload": cards,

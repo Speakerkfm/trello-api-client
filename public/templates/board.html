@@ -3,6 +3,18 @@
 {{ template "menu.html" . }}
 <h2>{{.boardName}}</h2>
 <p>{{.boardDescription}}</p>
+<form class="form-create-card" action="/v1/card" method="POST">
+    <input name="boardID" value="{{.boardID}}" style="display: none">
+    <div class="form-group">
+        <label for="task">Task:</label>
+        <input name="cardName" type="text" class="form-control" id="task-name">
+    </div>
+    <div class="form-group">
+        <label for="comment">Description:</label>
+        <textarea name="cardDescription" class="form-control" rows="5" id="task-description"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Create task</button>
+</form>
 <ul id="card-list" class="list-group">
 {{$lists := .lists}}
 {{range .payload }}
