@@ -8,6 +8,8 @@ import (
 	"encoding/hex"
 	"github.com/go-redis/redis"
 	"github.com/gorilla/sessions"
+	"github.com/jinzhu/gorm"
+	"github.com/mkideal/pkg/netutil/protocol"
 	"gopkg.in/boj/redistore.v1"
 	"io"
 	"time"
@@ -16,19 +18,20 @@ import (
 var Storage *storage
 
 type storage struct {
+	gorm *gorm.DB
 	SessionStore sessions.Store
 	redisClient *redis.Client
 	secret string
 }
 
-func Config(secretKey string) {
+func Config(secretKey, redisHost, redisPwd string, redisSize int, db *gorm.DB) {
 	var rst *redistore.RediStore
 	var err error
 
 	redisOpt := redis.Options{Addr: ":6379"}
 	redisClient := redis.NewClient(&redisOpt)
 
-	rst, err = redistore.NewRediStore(10, "tcp", ":6379", "", []byte(secretKey))
+	rst, err = redistore.NewRediStore(redisSize, protocol.TCP, redisHost, redisPwd, []byte(secretKey))
 	if err != nil {
 		panic(err)
 	}
@@ -39,6 +42,7 @@ func Config(secretKey string) {
 	})
 
 	Storage = &storage{
+		gorm: db,
 		SessionStore: rst,
 		redisClient: redisClient,
 		secret: secretKey,

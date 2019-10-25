@@ -7,5 +7,6 @@ import (
 
 func SetBoardRoutes(router *gin.RouterGroup) {
 	router.GET("/boards", board_p.GetAllBoards)
-	router.GET("/boards/:id", board_p.GetBoardById)
+	router.GET("/boards/own", board_p.GetOwnBoard)
+	router.GET("/boards/trello/:id", board_p.GetBoardById)
 }

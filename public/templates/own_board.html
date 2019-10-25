@@ -3,7 +3,7 @@
 {{ template "menu.html" . }}
 <h2>{{.boardName}}</h2>
 <span>{{.boardDescription}}</span>
-<form class="form-create-card" id="create-card-form">
+<form class="form-create-card" id="create-own-card-form">
     <input name="boardID" value="{{.boardID}}" style="display: none">
     <div class="form-group">
         <label for="task">Task:</label>
@@ -24,7 +24,7 @@
         <span class="card-desc">{{.Name}}</span>
         <span class="card-desc">{{.Description}}</span>
         <div class="card-status card-desc">
-            <span>Status:</span>
+            <span class="card-status card-desc">Status:</span>
             <div class="dropdown card-status-menu">
                 <button class="btn btn-primary dropdown-toggle card-status-menu" type="button"
                         data-toggle="dropdown">{{.Status}}
@@ -34,7 +34,7 @@
                 {{range $lists }}
                 {{if ne .Name $status}}
                     <li>
-                        <a href="#" onclick="updateCardStatus({{$cardID}}, {{.ID}})">{{.Name}}</a>
+                        <a href="#" onclick="updateOwnCardStatus({{$cardID}}, {{.ID}})">{{.Name}}</a>
                     </li>
                 {{end}}
                 {{end}}
@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="card-desc">
-            <button class="btn btn-danger btn-sm ml-auto card-delete" onclick="deleteCardById({{.ID}})">Удалить</button>
+            <button class="btn btn-danger btn-sm ml-auto card-delete" onclick="deleteOwnCardById({{.ID}})">Удалить</button>
         </div>
     </li>
 {{end}}

@@ -35,7 +35,7 @@ func TrelloLogin(c *gin.Context) {
 
 	store.Storage.Set(requestToken, requestSecret, 10 * time.Minute)
 
-	c.Redirect(http.StatusMovedPermanently, authorizationURL.String())
+	c.JSON(http.StatusOK, map[string]string{"url":authorizationURL.String()})
 }
 
 func TrelloCallback(c *gin.Context) {
@@ -59,8 +59,17 @@ func TrelloCallback(c *gin.Context) {
 
 	token := oauth1.NewToken(accessToken, accessSecret)
 
+	user, err := trello.GetUser(accessToken)
+	if err != nil {
+		c.AbortWithError(http.StatusTeapot, err)
+
+		return
+	}
+
 	session.Session.Values["token"] = token.Token
 	session.Session.Values["token_secret"] = token.TokenSecret
+	session.Session.Values["user_id"] = user.ID
+
 
 	sessions.Save(c.Request, c.Writer)
 
@@ -71,5 +80,5 @@ func Logout(c *gin.Context){
 	session.Session.Options.MaxAge = -1
 	sessions.Save(c.Request, c.Writer)
 
-	c.Redirect(http.StatusMovedPermanently, "/")
+	c.AbortWithStatus(http.StatusNoContent)
 }

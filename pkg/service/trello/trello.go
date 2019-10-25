@@ -11,10 +11,12 @@ import (
 	"net/http"
 	"net/url"
 	"trello-api-client/pkg/models"
+	"trello-api-client/pkg/store"
 )
 
 const (
-	callbackUrl = "http://localhost:8080/v1/trello/callback"
+	callbackUrl = "%s%s/v1/trello/callback"
+	userProfileUrl = "https://api.trello.com/1/members/me"
 	boardsUrl   = "https://api.trello.com/1/members/me/boards"
 	boardByIdUrl = "https://api.trello.com/1/boards/%s?lists=open"
 	cardByIdUrl = "https://api.trello.com/1/cards/%s"
@@ -30,11 +32,11 @@ var authorizeEndpoint = oauth1.Endpoint{
 
 var AuthConfig oauth1.Config
 
-func Config(consumerKey, consumerSecret string) {
+func Config(appHost, appPort, consumerKey, consumerSecret string) {
 	AuthConfig = oauth1.Config{
 		ConsumerKey:    consumerKey,
 		ConsumerSecret: consumerSecret,
-		CallbackURL:    callbackUrl,
+		CallbackURL:    fmt.Sprintf(callbackUrl, appHost, appPort),
 		Endpoint:       authorizeEndpoint,
 	}
 }
@@ -174,4 +176,29 @@ func doTrelloRequest(requestUrl, method, token string, body io.Reader) ([]byte, 
 	}
 
 	return bits, nil
+}
+
+
+func GetUser(token string) (*models.User, error){
+	bits, err := doTrelloRequest(userProfileUrl, http.MethodGet, token, http.NoBody)
+	if err != nil {
+		return nil, err
+	}
+
+	var trelloUser models.TrelloUser
+	err = json.Unmarshal(bits, &trelloUser)
+	if err != nil {
+		log.Error().Err(err).Msg("Unmarshal failed")
+
+		return nil, err
+	}
+
+	user, err := store.Storage.FindOrCreateUser(trelloUser.ID)
+	if err != nil {
+		log.Error().Err(err).Msg("User creating failed")
+
+		return nil, err
+	}
+
+	return user, nil
 }

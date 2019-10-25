@@ -5,5 +5,6 @@ type Card struct {
 	Name        string `json:"name"`
 	Description string `json:"desc"`
 	ListID string `json:"idList"`
-	Status string `json:"-"`
+	Status string `json:"-" gorm:"-"`
+	UserID int `json:"-" gorm:"user_id"`
 }

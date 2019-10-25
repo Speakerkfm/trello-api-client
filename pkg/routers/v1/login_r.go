@@ -6,7 +6,7 @@ import (
 )
 
 func SetTrelloLoginRoutes(router *gin.RouterGroup) {
-	router.GET("/trello/login_redirect", login.TrelloLogin)
+	router.POST("/trello/login_redirect", login.TrelloLogin)
 	router.GET("/trello/callback", login.TrelloCallback)
 }
 

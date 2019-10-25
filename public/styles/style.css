@@ -19,21 +19,28 @@ p{
 .card-status{
     display: flex;
     flex-direction: row;
+    margin: 0 auto;
 }
 
 .card-desc{
-    width: 25rem;
     display: flex;
     justify-items: center;
+    width: 25rem;
+    min-width: 20rem;
+    margin-top: 0;
 }
 
 .card-status-menu{
-    width: 15rem;
-    margin: auto;
+    min-width: 150px;
+    max-height: 34px;
+    margin-top: 0;
 }
 
 .card-delete{
-    margin: auto;
+    max-width: 100px;
+    max-height: 34px;
+    margin-top: 0;
+    margin-left: auto;
 }
 
 .form-create-card{

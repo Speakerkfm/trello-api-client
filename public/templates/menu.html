@@ -6,14 +6,17 @@
                 Home
             </a>
         {{if not .authorized}}
-            <a class="navbar-brand" href="/v1/trello/login_redirect">
+            <a class="navbar-brand" href="#" onclick="loginWithTrello()">
                 Login via Trello
             </a>
         {{else}}
             <a class="navbar-brand" href="/boards">
-                Boards
+                Trello Boards
             </a>
-            <a class="navbar-brand" href="/v1/logout">
+            <a class="navbar-brand" href="/boards/own">
+                Your board
+            </a>
+            <a class="navbar-brand" href="/" onclick="logout()">
                 Logout
             </a>
         {{end}}
