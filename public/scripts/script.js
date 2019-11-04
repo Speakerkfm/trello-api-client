@@ -21,7 +21,7 @@ function deleteOwnCardById(id) {
         type: "DELETE",
         url: "/v2/cards/" + id,
         success: function () {
-            location.reload();
+            document.querySelector(`li[data-id="${id}"]`).remove();
         }
     });
 }
@@ -53,7 +53,7 @@ function updateCardStatus(cardID, listID) {
     });
 }
 
-function updateOwnCardStatus(cardID, listID) {
+function updateOwnCardStatus(cardID, listID, status) {
     $.ajax({
         type: "POST",
         data: {
@@ -61,7 +61,7 @@ function updateOwnCardStatus(cardID, listID) {
         },
         url: "/v2/cards/" + cardID,
         success: function () {
-            location.reload();
+            document.querySelector(`button[data-id="${cardID}-status"]`).innerHTML = status
         }
     });
 }
@@ -81,7 +81,12 @@ $('#create-card-form').submit(function(e){
 });
 
 $('#create-own-card-form').submit(function(e){
+
     e.preventDefault();
+    if (document.getElementById("task-name").innerText === ""){
+        alert("Task name is empty!");
+        return
+    }
 
     $.ajax({
         type: "POST",
@@ -113,3 +118,38 @@ function logout() {
         }
     });
 }
+
+const Comments = {
+    async fetchComments(cardID) {
+        const commentsList = document.getElementById('comment-list');
+        const todosResponse = await fetch('https://jsonplaceholder.typicode.com/comments?postId=' + cardID);
+        if (!todosResponse.ok) {
+            throw new Error('Не удалось получить комментарии... ');
+        }
+        const comments = await todosResponse.json();
+
+        for (const comment of comments) {
+            const commentItem = document.createElement('li');
+            // List Item (ToDo)
+            commentItem.classList.add('list-group-item');
+            commentItem.classList.add('card-item');
+
+            const titleEl = document.createElement('span');
+            titleEl.textContent = comment.name;
+            titleEl.classList.add('card-desc');
+            commentItem.appendChild(titleEl);
+
+            const emailEl = document.createElement('span');
+            emailEl.textContent = comment.email;
+            emailEl.classList.add('card-desc');
+            commentItem.appendChild(emailEl);
+
+            const commentEl = document.createElement('span');
+            commentEl.textContent = comment.body;
+            commentEl.classList.add('card-desc');
+            commentItem.appendChild(commentEl);
+
+            commentsList.appendChild(commentItem);
+        }
+    },
+};

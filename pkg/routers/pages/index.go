@@ -11,5 +11,6 @@ func InitRoutes(g *gin.RouterGroup)  {
 	g.Use(authentication.AuthenticationRequired())
 	{
 		SetBoardRoutes(g)
+		SetCardRoutes(g)
 	}
 }

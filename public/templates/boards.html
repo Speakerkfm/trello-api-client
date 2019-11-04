@@ -5,11 +5,13 @@
 {{range .payload }}
     <li class="list-group-item board-item">
         <a class="board-name" href="/boards/trello/{{.ID}}">
-            <h2>{{.Name}}</h2>
+            <span>{{.Name}}</span>
         </a>
-        <p class="board-desc">{{.Description}}</p>
+        <span class="board-desc">{{.Description}}</span>
 
-        <button class="btn btn-danger btn-sm ml-auto" onclick="deleteBoardById({{.ID}})">Удалить</button>
+        <div class="card-desc">
+            <button class="btn btn-danger btn-sm ml-auto card-delete" onclick="deleteBoardById({{.ID}})">Удалить</button>
+        </div>
     </li>
 {{end}}
 </ul>

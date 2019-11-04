@@ -1,0 +1,9 @@
+{{ template "header.html" .}}
+<body class="container" onload="Comments.fetchComments({{.ID}})">
+{{ template "menu.html" . }}
+<h2>{{.cardName}}</h2>
+<span>{{.cardDescription}}</span>
+<ul id="comment-list" class="list-group">
+</ul>
+<script src="/public/scripts/script.js"></script>
+</body>

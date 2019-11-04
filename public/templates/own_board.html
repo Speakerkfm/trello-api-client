@@ -3,7 +3,7 @@
 {{ template "menu.html" . }}
 <h2>{{.boardName}}</h2>
 <span>{{.boardDescription}}</span>
-<form class="form-create-card" id="create-own-card-form">
+<form class="form-create-card list-group-item" id="create-own-card-form">
     <input name="boardID" value="{{.boardID}}" style="display: none">
     <div class="form-group">
         <label for="task">Task:</label>
@@ -18,25 +18,23 @@
 <ul id="card-list" class="list-group">
 {{$lists := .lists}}
 {{range .payload }}
-    <li class="list-group-item card-item">
+    <li class="list-group-item card-item" data-id="{{.ID}}">
     {{$cardID := .ID}}
     {{$status := .Status}}
-        <span class="card-desc">{{.Name}}</span>
+        <a class="card-desc" href="/cards/{{.ID}}">{{.Name}}</a>
         <span class="card-desc">{{.Description}}</span>
         <div class="card-status card-desc">
             <span class="card-status card-desc">Status:</span>
             <div class="dropdown card-status-menu">
                 <button class="btn btn-primary dropdown-toggle card-status-menu" type="button"
-                        data-toggle="dropdown">{{.Status}}
+                        data-toggle="dropdown" data-id="{{$cardID}}-status">{{.Status}}
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
                 {{range $lists }}
-                {{if ne .Name $status}}
                     <li>
-                        <a href="#" onclick="updateOwnCardStatus({{$cardID}}, {{.ID}})">{{.Name}}</a>
+                        <a href="#" onclick="updateOwnCardStatus({{$cardID}}, {{.ID}}, {{.Name}})">{{.Name}}</a>
                     </li>
-                {{end}}
                 {{end}}
                 </ul>
             </div>

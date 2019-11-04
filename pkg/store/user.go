@@ -6,18 +6,18 @@ import (
 )
 
 func (s *storage) FindOrCreateUser(trelloID string) (*models.User, error){
-	user := &models.User{
-		TrelloID: trelloID,
-	}
+	var user models.User
 	var err error
-	if err = s.gorm.First(user).Error; err != nil && err != gorm.ErrRecordNotFound{
+	if err = s.gorm.Table("user").Where("trello_id=?", trelloID).Scan(&user).Error; err != nil && err != gorm.ErrRecordNotFound{
 		return nil, err
 	}
 
 	if err == gorm.ErrRecordNotFound {
 		tx := s.gorm.Begin()
 
-		if err := tx.Create(user).Error; err != nil{
+		user.TrelloID = trelloID
+
+		if err := tx.Create(&user).Error; err != nil{
 			tx.Rollback()
 
 			return nil, err
@@ -48,5 +48,5 @@ func (s *storage) FindOrCreateUser(trelloID string) (*models.User, error){
 		tx.Commit()
 	}
 
-	return user, nil
+	return &user, nil
 }

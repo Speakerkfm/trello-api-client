@@ -17,6 +17,17 @@ func GetUserCards(userID int) ([]models.Card, error){
 	return cards, nil
 }
 
+func GetCardByID(userID int, cardID string) (*models.Card, error){
+	card, err := store.Storage.GetCardByID(userID, cardID)
+	if err != nil {
+		log.Error().Err(err).Msg("Error while getting user cards")
+
+		return nil, err
+	}
+
+	return card, nil
+}
+
 func GetUserLists(userID int) ([]models.List, error){
 	lists, err := store.Storage.GetListsByUserID(userID)
 	if err != nil {

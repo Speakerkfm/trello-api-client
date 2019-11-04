@@ -5,7 +5,7 @@ import "trello-api-client/pkg/models"
 func (s *storage) GetListsByUserID(userID int) ([]models.List, error){
 	var lists []models.List
 
-	err := s.gorm.Table("list").Scan(&lists).Where("user_id=?", userID).Error
+	err := s.gorm.Table("list").Where("user_id=?", userID).Scan(&lists).Error
 
 	return lists, err
 }
